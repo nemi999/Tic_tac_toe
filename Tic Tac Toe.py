@@ -17,7 +17,6 @@ if player == 'o':
     enemy = 'x'
 else:
     enemy = 'o'
-    
 print("Player", player.upper())
 print("Enemy", enemy.upper())
 
@@ -145,10 +144,26 @@ def take_tally(x: int, y: int, symbol: str) -> None:
         # check_if_win()
         # print(player_turn)
 
+def reset_game():
+    for x in range(3):
+        for y in range(3):
+            column[y][x] = ''
+    create_board()
+
 def end_game_tie() -> None:
     print_grid()
     print("Game over, it was a tie")
-    game.destroy()
+    play_again = ''
+    while True:
+        play_again=input("Play again? (y or n) ")
+        if play_again == 'y' or play_again == 'n':
+            break
+        else:
+            print("Choose y or n")
+    if play_again == 'y':
+        reset_game()
+    else:
+        game.destroy()
 
 def end_game_winner(winner: bool) -> None:
     print_grid()
@@ -156,7 +171,17 @@ def end_game_winner(winner: bool) -> None:
         print("You won!")
     else:
         print("You lost!")
-    game.destroy()
+    play_again = ''
+    while True:
+        play_again=input("Play again? (y or n) ")
+        if play_again == 'y' or play_again == 'n':
+            break
+        else:
+            print("Choose y or n")
+    if play_again == 'y':
+        reset_game()
+    else:
+        game.destroy()
 
 def callback(event):
     take_tally(event.x, event.y, player)
