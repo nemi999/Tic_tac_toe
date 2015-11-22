@@ -17,6 +17,7 @@ if player == 'o':
     enemy = 'x'
 else:
     enemy = 'o'
+    
 print("Player", player.upper())
 print("Enemy", enemy.upper())
 
