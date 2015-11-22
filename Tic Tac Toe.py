@@ -1,24 +1,11 @@
 @@ -0,0 +1,182 @@
 from random import randrange
 from tkinter import *
+from Choose_Character import player, enemy
+from Choose_to_go_first_or_not import go_first
 game = Tk()
-
-player = ''
-enemy = ''
-
-while True:
-    player = input("Do you want to be X or O ? ")
-    if player.lower() == 'x' or player.lower() == 'o':
-        break
-    else:
-        print("Choose X or O")
-
-if player == 'o':
-    enemy = 'x'
-else:
-    enemy = 'o'
-print("Player", player.upper())
-print("Enemy", enemy.upper())
+print(go_first)
+result = ''
 
 row1 = ['', '', '']
 row2 = ['', '', '']
@@ -62,6 +49,7 @@ def random_ai_turn(): #not final AI version (?)
     else:
         random_ai_turn()
         return None
+
 
 def create_x(x1, y1, x2, y2):
     frame.create_line(x1, y1, x2, y2)
@@ -151,37 +139,23 @@ def reset_game():
     create_board()
 
 def end_game_tie() -> None:
+    global result
     print_grid()
     print("Game over, it was a tie")
-    play_again = ''
-    while True:
-        play_again=input("Play again? (y or n) ")
-        if play_again == 'y' or play_again == 'n':
-            break
-        else:
-            print("Choose y or n")
-    if play_again == 'y':
-        reset_game()
-    else:
-        game.destroy()
+    reset_game()
+    result = "Tie!"
+    game.destroy()
+    import Retry
 
 def end_game_winner(winner: bool) -> None:
+    global result
     print_grid()
     if (player_turn):
-        print("You won!")
+        result = ("You won!")
     else:
-        print("You lost!")
-    play_again = ''
-    while True:
-        play_again=input("Play again? (y or n) ")
-        if play_again == 'y' or play_again == 'n':
-            break
-        else:
-            print("Choose y or n")
-    if play_again == 'y':
-        reset_game()
-    else:
-        game.destroy()
+        result = ("You lost!")
+    game.destroy()
+    import Retry
 
 def callback(event):
     take_tally(event.x, event.y, player)
@@ -205,22 +179,20 @@ def check_if_win(list: 'list of list') -> bool:
 def is_empty(s: str) -> bool:
     return s == ''
 
+if not player:
+    random_ai_turn()
+    print_grid()
+
 player_turn = True  # when True, its players turn
-go_first = ""
-while (True):
-    go_first = input("Do you want to go first? (y or n) ")
-    if go_first == 'y' or go_first == 'n':
-        break
-    else:
-        print("Choose Y or N")
-
-print(go_first)
-
 if go_first == 'y':
     player_turn = True
 elif go_first == 'n':
     player_turn = False
     random_ai_turn()
 
-game.lift()
-game.mainloop()
+reset_game()
+
+def on_closing():
+    game.destroy()
+
+game.protocol("WM_DELETE_WINDOW", on_closing)
