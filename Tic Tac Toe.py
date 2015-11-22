@@ -6,7 +6,12 @@ game = Tk()
 player = ''
 enemy = ''
 
-player = input("Do you want to be X or O ? ")
+while True:
+    player = input("Do you want to be X or O ? ")
+    if player.lower() == 'x' or player.lower() == 'o':
+        break
+    else:
+        print("Choose X or O")
 
 if player == 'o':
     enemy = 'x'
@@ -31,28 +36,31 @@ def print_grid():
 frame = Canvas(game, width=600, height=600)
 game.title("Tic Tac Toe")
 
-offset = 2
-frame.create_rectangle(10 + offset, 10 + offset, 190 + offset, 190 + offset, fill='#66CD00')
-frame.create_rectangle(210 + offset, 10 + offset, 390 + offset, 190 + offset, fill='#66CD00')
-frame.create_rectangle(410 + offset, 10 + offset, 590 + offset, 190 + offset, fill='#66CD00')
+def create_board():
+    global offset
+    offset = 2
+    frame.create_rectangle(10 + offset, 10 + offset, 190 + offset, 190 + offset, fill='#66CD00', activefill="red")
+    frame.create_rectangle(210 + offset, 10 + offset, 390 + offset, 190 + offset, fill='#66CD00', activefill="red")
+    frame.create_rectangle(410 + offset, 10 + offset, 590 + offset, 190 + offset, fill='#66CD00', activefill="red")
 
-frame.create_rectangle(210 + offset, 210 + offset, 390 + offset, 390 + offset, fill='#66CD00')
-frame.create_rectangle(10 + offset, 210 + offset, 190 + offset, 390 + offset, fill='#66CD00')
-frame.create_rectangle(10 + offset, 410 + offset, 190 + offset, 590 + offset, fill='#66CD00')
+    frame.create_rectangle(210 + offset, 210 + offset, 390 + offset, 390 + offset, fill='#66CD00', activefill="red")
+    frame.create_rectangle(10 + offset, 210 + offset, 190 + offset, 390 + offset, fill='#66CD00', activefill="red")
+    frame.create_rectangle(10 + offset, 410 + offset, 190 + offset, 590 + offset, fill='#66CD00', activefill="red")
 
-frame.create_rectangle(210 + offset, 410 + offset, 390 + offset, 590 + offset, fill='#66CD00')
-frame.create_rectangle(410 + offset, 210 + offset, 590 + offset, 390 + offset, fill='#66CD00')
-frame.create_rectangle(410 + offset, 410 + offset, 590 + offset, 590 + offset, fill='#66CD00')
-frame.pack()
+    frame.create_rectangle(210 + offset, 410 + offset, 390 + offset, 590 + offset, fill='#66CD00', activefill="red")
+    frame.create_rectangle(410 + offset, 210 + offset, 590 + offset, 390 + offset, fill='#66CD00', activefill="red")
+    frame.create_rectangle(410 + offset, 410 + offset, 590 + offset, 590 + offset, fill='#66CD00', activefill="red")
+    frame.pack()
 
+create_board()
 
-def dumb_AI_turn(): #not final AI version
+def random_ai_turn(): #not final AI version (?)
     x = (randrange(3))
     y = (randrange(3))
     if column[y][x] == "":
         take_tally((x) * 200, (y) * 200, enemy)
     else:
-        dumb_AI_turn()
+        random_ai_turn()
         return None
 
 def create_x(x1, y1, x2, y2):
@@ -68,6 +76,12 @@ def take_tally(x: int, y: int, symbol: str) -> None:
         else:
             create_x(25, 25, 175, 175)
         column[0][0] = symbol
+    elif x >= 200 and x < 400 and y < 200 and column[0][1] == '':
+        if symbol == 'o':
+            frame.create_oval(225, 25, 375, 175)
+        else:
+            create_x(225, 25, 375, 175)
+        column[0][1] = symbol
     elif x >= 200 and x < 400 and y < 200 and column[0][1] == '':
         if symbol == 'o':
             frame.create_oval(225, 25, 375, 175)
@@ -126,7 +140,7 @@ def take_tally(x: int, y: int, symbol: str) -> None:
     print_grid()
     player_turn = not player_turn
     if not player_turn:
-        dumb_AI_turn()
+        random_ai_turn()
         # check_if_win()
         # print(player_turn)
 
@@ -171,6 +185,8 @@ while (True):
     go_first = input("Do you want to go first? (y or n) ")
     if go_first == 'y' or go_first == 'n':
         break
+    else:
+        print("Choose Y or N")
 
 print(go_first)
 
@@ -178,6 +194,6 @@ if go_first == 'y':
     player_turn = True
 elif go_first == 'n':
     player_turn = False
-    dumb_AI_turn()
+    random_ai_turn()
 
 game.mainloop()
