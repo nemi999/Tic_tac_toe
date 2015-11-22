@@ -222,4 +222,5 @@ elif go_first == 'n':
     player_turn = False
     random_ai_turn()
 
+game.lift()
 game.mainloop()
